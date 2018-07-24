@@ -20,6 +20,8 @@ namespace AggregateGDPPopulation.Tests
             JObject expectedJson = JObject.Parse(expected);
 
             Console.WriteLine(actual);
+            Console.WriteLine("------");
+            Console.WriteLine(expected);
             Assert.Equal(actualJson, expectedJson);
         }
     }
