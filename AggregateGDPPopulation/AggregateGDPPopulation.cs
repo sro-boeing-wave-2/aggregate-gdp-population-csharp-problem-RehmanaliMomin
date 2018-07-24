@@ -5,16 +5,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace AggregateGDPPopulation
 {
     public class Class1
     {
 
-        public static void Solution()
+        public static async Task<string> ReadfileMethod()
         {
-            string data = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/datafile.csv", Encoding.UTF8);
-            string dataWithoutQuotes = data.Replace("\"", "");
+            string data = File.ReadAllTextAsync(@"../../../../AggregateGDPPopulation/data/datafile.csv", Encoding.UTF8);
+            return await data;
+        }
+
+        public static void OperationsMethod(String s) {
+
+            string dataWithoutQuotes = s.Replace("\"", "");
             string[] rows = Regex.Split(dataWithoutQuotes, "\n");
             string[] header = rows[0].Split(',');
 
@@ -27,7 +33,7 @@ namespace AggregateGDPPopulation
 
             Dictionary<string, OutputObject> outputMap = new Dictionary<string, OutputObject>();
 
-            for (int i = 1; i < rows.Length-2; i++)
+            for (int i = 1; i < rows.Length - 2; i++)
             {
                 string[] row = rows[i].Split(',');
                 string country = row[countryNameIndex];
@@ -54,6 +60,9 @@ namespace AggregateGDPPopulation
 
             Console.WriteLine("Output String");
             Console.WriteLine(outputString);
+        }
+
+        public static void WriteFileMethod(string outputString) { 
 
             File.WriteAllText(@"../../../../output/output.json", outputString);
         }

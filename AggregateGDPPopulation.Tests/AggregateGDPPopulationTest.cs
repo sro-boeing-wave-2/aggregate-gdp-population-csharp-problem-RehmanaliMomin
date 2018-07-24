@@ -1,6 +1,8 @@
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace AggregateGDPPopulation.Tests
@@ -8,20 +10,22 @@ namespace AggregateGDPPopulation.Tests
     public class UnitTest1
     {
         [Fact]
-        public void Test1()
+        public async void Test1()
         {
-            Class1.Solution();
+            await Class1.OperationsMethod();
 
-            var expected = File.ReadAllText(@"../../../expected-output.json");
-            var actual = File.ReadAllText(@"../../../../output/output.json");
+            Task<string> expectedOutputTask = Class1.ReadFileAsync(@"../../../expected-output.json");
+            Task<string> actualOutputTask = Class1.ReadFileAsync(@"../../../../AggregateGDPPopulation/output/output.json");
 
-            JObject actualJson = JObject.Parse(actual);
-            JObject expectedJson = JObject.Parse(expected);
+            var tasks = new List<Task>();
+            tasks.Add(expectedOutputTask);
+            tasks.Add(actualOutputTask);
 
-            Console.WriteLine(actual);
-            Console.WriteLine("------");
-            Console.WriteLine(expected);
-            Assert.Equal(expectedJson, actualJson);
+            Task.WaitAll(tasks.ToArray());
+
+            string expectedOutput = expectedOutputTask.Result;
+            string actualOutput =  actualOutputTask.Result;
+            Assert.Equal(expectedOutputTask, actualOutputTask);
         }
     }
 }
