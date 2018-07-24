@@ -12,7 +12,7 @@ namespace AggregateGDPPopulation.Tests
         {
             Class1.Solution();
             var actual = File.ReadAllText(@"../../../expected-output.json");
-            var expected = File.ReadAllText(@"../../../../output\output.json");
+            var expected = File.ReadAllText(@"../../../../output/output.json");
 
             JObject actualJson = JObject.Parse(actual);
             JObject expectedJson = JObject.Parse(expected);
