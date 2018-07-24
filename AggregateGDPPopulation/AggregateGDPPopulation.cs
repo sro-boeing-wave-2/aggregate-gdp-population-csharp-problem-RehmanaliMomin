@@ -14,12 +14,12 @@ namespace AggregateGDPPopulation
         public static void Solution()
         {
 
-            string data = File.ReadAllText(@"..\..\..\..\AggregateGDPPopulation\data\datafile.csv", Encoding.UTF8);
+            string data = File.ReadAllText(@"../../../../AggregateGDPPopulation\data\datafile.csv", Encoding.UTF8);
             string dataWithoutQuotes = data.Replace("\"", "");
             string[] rows = Regex.Split(dataWithoutQuotes, "\r\n");
             string[] header = rows[0].Split(',');
 
-            string dataMapping = File.ReadAllText(@"..\..\..\..\AggregateGDPPopulation\data\continent-country.json", Encoding.UTF8);
+            string dataMapping = File.ReadAllText(@"../../../../AggregateGDPPopulation\data\continent-country.json", Encoding.UTF8);
             var countryContinentMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(dataMapping);
 
             int countryNameIndex = Array.IndexOf(header, "Country Name");
@@ -54,7 +54,7 @@ namespace AggregateGDPPopulation
             string outputString = JsonConvert.SerializeObject(outputMap);
 
           
-            System.IO.File.WriteAllText(@"E:\workspace\Assignment-C#\aggregate-gdp-population-csharp-problem-RehmanaliMomin\output\output.json", outputString);
+            System.IO.File.WriteAllText(@"E:/workspace/Assignment-C#/aggregate-gdp-population-csharp-problem-RehmanaliMomin/output/output.json", outputString);
 
         
         }
