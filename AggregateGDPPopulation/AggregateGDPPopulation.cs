@@ -19,7 +19,7 @@ namespace AggregateGDPPopulation
             string[] rows = Regex.Split(dataWithoutQuotes, "\r\n");
             string[] header = rows[0].Split(',');
 
-            string dataMapping = File.ReadAllText(@"../../../../AggregateGDPPopulation\data\continent-country.json", Encoding.UTF8);
+            string dataMapping = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/continent-country.json", Encoding.UTF8);
             var countryContinentMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(dataMapping);
 
             int countryNameIndex = Array.IndexOf(header, "Country Name");
