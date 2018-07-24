@@ -53,7 +53,7 @@ namespace AggregateGDPPopulation
             string outputString = JsonConvert.SerializeObject(outputMap);
 
           
-            System.IO.File.WriteAllText(@"E:/workspace/Assignment-C#/aggregate-gdp-population-csharp-problem-RehmanaliMomin/output/output.json", outputString);
+            System.IO.File.WriteAllText(@"../../../../output/output.json", outputString);
 
         
         }
