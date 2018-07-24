@@ -14,7 +14,7 @@ namespace AggregateGDPPopulation
         public static void Solution()
         {
 
-            string data = File.ReadAllText(@"../../../../AggregateGDPPopulation\data\datafile.csv", Encoding.UTF8);
+            string data = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/datafile.csv", Encoding.UTF8);
             string dataWithoutQuotes = data.Replace("\"", "");
             string[] rows = Regex.Split(dataWithoutQuotes, "\r\n");
             string[] header = rows[0].Split(',');
