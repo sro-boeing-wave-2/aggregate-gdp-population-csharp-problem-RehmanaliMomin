@@ -55,6 +55,8 @@ namespace AggregateGDPPopulation
           
             System.IO.File.WriteAllText(@"../../../../output/output.json", outputString);
 
+            Console.WriteLine(outputString);
+
         
         }
 
