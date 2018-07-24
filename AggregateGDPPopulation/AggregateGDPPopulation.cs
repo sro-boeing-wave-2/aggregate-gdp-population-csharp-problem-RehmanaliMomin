@@ -52,12 +52,10 @@ namespace AggregateGDPPopulation
 
             string outputString = JsonConvert.SerializeObject(outputMap);
 
-          
-            System.IO.File.WriteAllText(@"../../../../output/output.json", outputString);
+            Console.WriteLine("Output String");
+            Console.WriteLine(outputString);
 
-           // Console.WriteLine(outputString);
-
-        
+            File.WriteAllText(@"../../../../output/output.json", outputString);
         }
 
         class OutputObject

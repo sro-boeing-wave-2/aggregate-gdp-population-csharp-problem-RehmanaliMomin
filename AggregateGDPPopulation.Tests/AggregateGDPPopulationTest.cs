@@ -8,10 +8,9 @@ namespace AggregateGDPPopulation.Tests
     public class UnitTest1
     {
         [Fact]
-        public void Test1()             //..\..\..\..\AggregateGDPPopulation\data\datafile.csv
+        public void Test1()
         {
             Class1.Solution();
-
 
             var expected = File.ReadAllText(@"../../../expected-output.json");
             var actual = File.ReadAllText(@"../../../../output/output.json");
