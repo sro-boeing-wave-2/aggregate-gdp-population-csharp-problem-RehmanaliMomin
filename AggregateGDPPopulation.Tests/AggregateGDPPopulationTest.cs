@@ -13,7 +13,7 @@ namespace AggregateGDPPopulation.Tests
             GDPAggregate.OperationsMethod();
 
             var expected = File.ReadAllText(@"../../../expected-output.json");
-            var actual = File.ReadAllText(@"../../../../output/output.json");
+            var actual = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/output.json");
 
             JObject actualJson = JObject.Parse(actual);
             JObject expectedJson = JObject.Parse(expected);

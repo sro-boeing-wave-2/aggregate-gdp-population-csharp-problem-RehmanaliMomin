@@ -24,7 +24,7 @@ namespace AggregateGDPPopulation
         }
 
         //Function to write file asynchronously
-        public static async void WriteFileAsync(string filepath, string data)
+        public static async Task WriteFileAsync(string filepath, string data)
         {
             using (StreamWriter streamwriter = new StreamWriter(filepath))
             {
@@ -102,7 +102,8 @@ namespace AggregateGDPPopulation
                 }
             }
             string outputString = JsonConvert.SerializeObject(outputMap);
-            FileOperations.WriteFileAsync("../../../../AggregateGDPPopulation/output/output.json", outputString);
+            Console.WriteLine(outputString);
+            await FileOperations.WriteFileAsync("../../../../AggregateGDPPopulation/data/output.json", outputString);
         }
     }
 }
