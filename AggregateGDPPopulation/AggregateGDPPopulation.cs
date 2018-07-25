@@ -66,7 +66,7 @@ namespace AggregateGDPPopulation
             Task<string> dataTask = FileOperations.ReadFileAsync("../../../../AggregateGDPPopulation/data/datafile.csv");
             Task<string> mappingTask = FileOperations.ReadFileAsync("../../../../AggregateGDPPopulation/data/continent-country.json");
 
-            string mapFile = await mappingTask;
+           
             string dataFile = await dataTask;
 
             string dataWithoutQuotes = dataFile.Replace("\"", "");
@@ -75,14 +75,16 @@ namespace AggregateGDPPopulation
 
             //string dataMapping = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/continent-country.json", Encoding.UTF8);
             //Dictionary<string, string> countryContinentMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(mapFile);
-
-            Dictionary<string, string> countryContinentMap = JsonToDictionary(mapFile);
+        
 
             int countryNameIndex = Array.IndexOf(header, "Country Name");
             int populationIndex = Array.IndexOf(header, "Population (Millions) 2012");
             int gdpIndex = Array.IndexOf(header, "GDP Billions (USD) 2012");
 
             Dictionary<string, Dictionary<string, float>> outputMap = new Dictionary<string, Dictionary<string, float>>();
+
+            string mapFile = await mappingTask;
+            Dictionary<string, string> countryContinentMap = JsonToDictionary(mapFile);
 
             for (int i = 1; i < rows.Length - 2; i++)
             {
