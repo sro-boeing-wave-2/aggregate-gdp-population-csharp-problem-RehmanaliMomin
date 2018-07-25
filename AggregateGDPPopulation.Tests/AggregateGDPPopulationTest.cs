@@ -10,7 +10,7 @@ namespace AggregateGDPPopulation.Tests
         [Fact]
         public void Test1()
         {
-            Class1.OperationsMethod();
+            GDPAggregate.OperationsMethod();
 
             var expected = File.ReadAllText(@"../../../expected-output.json");
             var actual = File.ReadAllText(@"../../../../output/output.json");

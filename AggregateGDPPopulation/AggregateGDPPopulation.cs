@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace AggregateGDPPopulation
 {
-    public class Class1
+
+    public class FileOperations
     {
+        //Function to read file asynchronously
         public static async Task<string> ReadFileAsync(string filepath)
         {
             string data = "";
@@ -21,6 +23,7 @@ namespace AggregateGDPPopulation
             return data;
         }
 
+        //Function to write file asynchronously
         public static async void WriteFileAsync(string filepath, string data)
         {
             using (StreamWriter streamwriter = new StreamWriter(filepath))
@@ -28,29 +31,58 @@ namespace AggregateGDPPopulation
                 await streamwriter.WriteLineAsync(data);
             }
         }
+    }
 
 
-        public static async Task OperationsMethod()
+    public class GDPAggregate
+    {
+
+        //Function to convert string json file into dictionary object
+        public static Dictionary<string, string> JsonToDictionary(string DataFile)
         {
-            Task<string> dataTask = ReadFileAsync("../../../../AggregateGDPPopulation/data/datafile.csv");
-            Task<string> mappingTask = ReadFileAsync("../../../../AggregateGDPPopulation/data/continent-country.json");
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(DataFile);
+        }
 
-            string dataFile = await dataTask;
+        //Update Map, add countries data
+        public static void UpdateContinentData(Dictionary<string, Dictionary<string, float>> mainDict, string continent, int gdpIndex, int populationIndex, string[] row)
+        {
+            Dictionary<string, float> continentDataDictionary = mainDict[continent];
+            continentDataDictionary["GDP_2012"] = continentDataDictionary["GDP_2012"] + float.Parse(row[gdpIndex]);
+            continentDataDictionary["POPULATION_2012"] = continentDataDictionary["POPULATION_2012"] + float.Parse(row[populationIndex]);
+        }
+
+        //Add new continentCountrydata
+        public static void AddNewContinenData(Dictionary<string, Dictionary<string, float>> mainDict, string continent, float gdp, float pop)
+        {
+            Dictionary<string, float> NewContinentDataDictionary = new Dictionary<string, float>();
+            NewContinentDataDictionary.Add("GDP_2012", gdp);
+            NewContinentDataDictionary.Add("POPULATION_2012", pop);
+            mainDict.Add(continent, NewContinentDataDictionary);
+        }
+
+        // Main method
+        public async static void OperationsMethod()
+        {
+            Task<string> dataTask = FileOperations.ReadFileAsync("../../../../AggregateGDPPopulation/data/datafile.csv");
+            Task<string> mappingTask = FileOperations.ReadFileAsync("../../../../AggregateGDPPopulation/data/continent-country.json");
+
             string mapFile = await mappingTask;
+            string dataFile = await dataTask;
 
             string dataWithoutQuotes = dataFile.Replace("\"", "");
             string[] rows = Regex.Split(dataWithoutQuotes, "\n");
             string[] header = rows[0].Split(',');
 
-
             //string dataMapping = File.ReadAllText(@"../../../../AggregateGDPPopulation/data/continent-country.json", Encoding.UTF8);
-            var countryContinentMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(mapFile);
+            //Dictionary<string, string> countryContinentMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(mapFile);
+
+            Dictionary<string, string> countryContinentMap = JsonToDictionary(mapFile);
 
             int countryNameIndex = Array.IndexOf(header, "Country Name");
             int populationIndex = Array.IndexOf(header, "Population (Millions) 2012");
             int gdpIndex = Array.IndexOf(header, "GDP Billions (USD) 2012");
 
-            Dictionary<string, OutputObject> outputMap = new Dictionary<string, OutputObject>();
+            Dictionary<string, Dictionary<string, float>> outputMap = new Dictionary<string, Dictionary<string, float>>();
 
             for (int i = 1; i < rows.Length - 2; i++)
             {
@@ -60,29 +92,15 @@ namespace AggregateGDPPopulation
 
                 if (!outputMap.ContainsKey(continent))
                 {
-                    OutputObject obj = new OutputObject();
-                    obj.GDP_2012 = float.Parse(row[gdpIndex]);
-                    obj.POPULATION_2012 = float.Parse(row[populationIndex]);
-                    outputMap.Add(continent, obj);
+                    AddNewContinenData(outputMap, continent, float.Parse(row[gdpIndex]), float.Parse(row[populationIndex]));
                 }
                 else
                 {
-                    OutputObject obj = outputMap[continent];
-                    obj.GDP_2012 += float.Parse(row[gdpIndex]);
-                    obj.POPULATION_2012 += float.Parse(row[populationIndex]);
+                    UpdateContinentData(outputMap, continent, gdpIndex, populationIndex, row);
                 }
             }
             string outputString = JsonConvert.SerializeObject(outputMap);
-            Console.WriteLine("Output String");
-            Console.WriteLine(outputString);
-            WriteFileAsync("../../../../AggregateGDPPopulation/output/output.json", outputString);
-        }
-
-
-        class OutputObject
-        {
-            public float GDP_2012 { get; set; }
-            public float POPULATION_2012 { get; set; }
+            FileOperations.WriteFileAsync("../../../../AggregateGDPPopulation/output/output.json", outputString);
         }
     }
 }
